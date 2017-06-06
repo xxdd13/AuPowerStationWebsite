@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Observation</title>
+        <meta charset="utf-8" />
+	<link rel="icon" type="image/png" href="assets/img/favicon.ico">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+        <!-- external libs from cdnjs -->
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.11/c3.min.css">
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.min.css">
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/4.1.2/papaparse.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.jquery.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.11/c3.min.js"></script>
+
+        <!-- PivotTable.js libs from ../dist -->
+        <link rel="stylesheet" type="text/css" href="/dist/pivot.css">
+        <script type="text/javascript" src="/dist/pivot.js"></script>
+        <script type="text/javascript" src="/dist/d3_renderers.js"></script>
+        <script type="text/javascript" src="/dist/c3_renderers.js"></script>
+        <script type="text/javascript" src="/dist/export_renderers.js"></script>
+        <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
+    <meta name="viewport" content="width=device-width" />
+
+
+    <!-- Bootstrap core CSS     -->
+    <link href="assets/css/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- Animation library for notifications   -->
+    <link href="assets/css/animate.min.css" rel="stylesheet"/>
+
+    <!--  Light Bootstrap Table core CSS    -->
+    <link href="assets/css/light-bootstrap-dashboard.css" rel="stylesheet"/>
+    <!--     Fonts and icons     -->
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href='http://fonts.googleapis.com/css?family=Roboto:400,700,300' rel='stylesheet' type='text/css'>
+    <link href="assets/css/pe-icon-7-stroke.css" rel="stylesheet" />
+
+      
+
+      
+    </head>
+    <body>
+        <script type="text/javascript">
+    // This example shows how to prepopulate the UI on
+    // load using the "Canadian Parliament 2012" dataset.
+
+    $(function(){
+        $.getJSON("mps2.json", function(mps) {
+            $("#output").pivotUI(mps, {
+                
+                rendererName: "Heatmap",
+                rendererOptions: {
+                    table: {
+                        clickCallback: function(e, value, filters, pivotData){
+                            var names = [];
+                            pivotData.forEachMatchingRecord(filters,
+                                function(record){ names.push(record.Name); });
+                            alert(names.join("\n"));
+                        }
+                    }
+                }
+            });
+        });
+     });
+        </script>
+      
+        <div class="wrapper">
+      <div class="sidebar" data-color="" data-image="assets/img/sidebar-5.jpg">
+
+    	<div class="sidebar-wrapper">
+            <div class="logo">
+                <a href="index.html" class="simple-text">
+                    National Major Power Stations
+                </a>
+            </div>
+
+            <ul class="nav">
+                <li >
+                    <a href="/">
+                        <i class="pe-7s-graph"></i>
+                        <p>Dashboard</p>
+                    </a>
+                </li>
+               
+                <li>
+                    <a href="/poweroutput">
+                        <i class="pe-7s-note2"></i>
+                        <p>Power Output</p>
+                    </a>
+                </li>
+                <li>
+                    <a href="/rawdata">
+                        <i class="pe-7s-note2"></i>
+                        <p>Raw CSV Data</p>
+                    </a>
+                </li>
+                <li>
+                    <a href="/builder">
+                        <i class="pe-7s-note"></i>
+                        <p>Simple Pivot Table</p>
+                    </a>
+                </li>
+                <li>
+                    <a href="/testpivot">
+                        <i class="pe-7s-note2"></i>
+                        <p>Advanced Pivot Table</p>
+                    </a>
+                </li>
+                
+                <li>
+                    <a href="/geo">
+                        <i class="pe-7s-map-marker"></i>
+                        <p>Geo Maps</p>
+                    </a>
+                </li>
+                
+                <li>
+                    <a href="/member">
+                        <i class="pe-7s-users"></i>
+                        <p>Group Members</p>
+                    </a>
+                </li>
+				<li class="active-pro active">
+                    <a href="/ob">
+                        <i class="pe-7s-rocket"></i>
+                        <p>Observations</p>
+                    </a>
+                </li>
+            </ul>
+    	</div>
+    </div>
+ <div class="main-panel">
+        <nav class="navbar navbar-default navbar-fixed">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navigation-example-2">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#">Observations</a>
+                </div>
+                <div class="collapse navbar-collapse">
+                    <ul class="nav navbar-nav navbar-left">
+                        
+                        
+                        
+                    </ul>
+
+                    <ul class="nav navbar-nav navbar-right">
+
+                        
+                        
+						<li class="separator hidden-lg hidden-md"></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+
+        <div class="content">
+             <div class="container-fluid">
+             
+             <div id="container" style="min-width: 310px; max-width: 800px; height: 400px; margin: 0 auto"></div>
+             <div style="margin-top: 10px" id="draggable" class="ui-widget-content">
+             
+             <p style="min-width: 310px; max-width: 800px; margin: 0 auto">
+             Australia uses a huge variety of power generators.<br>
+				 Steam Type Generator dominates Australian Power Generation.<br>
+New South Wales has the highest power generation (22,000 MWatts), <br>
+while Australian Capital Territory has the least (less than 1,000 MWatts). <br>
+
+             </p>
+             </div>
+             <div>
+             <p style="margin-top: 20px"></p>
+             <div id="container2" style="min-width: 310px; max-width: 800px; height: 400px; margin: 0 auto"></div>
+             <div style="margin-top: 10px" id="draggable2" class="ui-widget-content">
+             
+             <p style="min-width: 310px; max-width: 800px; margin: 0 auto;margin-left: 200px">
+             The number of power stations that uses natural gas as primary fuel is the highest of all, with 29.26% of total fuels<br>However, this does not indicates the amount of energy natural gas can generate
+             <br>
+				<br>
+
+
+             </p>
+             </div>
+              <div id="container4" style="min-width: 310px;max-width: 800px; height: 500px; margin: 0 auto"></div>  
+             
+             <div style="margin-top: 10px" id="draggable4" class="ui-widget-content">
+             
+             <p style="min-width: 310px; max-width: 800px; margin: 0 auto;margin-left: 200px">
+             Coal is the most common fuel type used to generate power, followed by natural gas. <br>
+             This makes sense as Australia is rich in both coal and natural gas deposits.<br>
+              However, this poses a problem as these two fuel types are non-renewable and there doesn't appear to be viable replacement to date<br>
+             <br>
+				<br>
+
+
+             </p>
+             </div>
+             <p style="margin-top: 40px"></p>
+             <div id="container3" style="min-width: 310px; max-width: 800px; height: 400px; margin: 0 auto"></div>
+             <div style="margin-top: 10px" id="draggable3" class="ui-widget-content">
+             
+             <p style="min-width: 310px; max-width: 800px; margin: 0 auto;margin-left: 200px">
+             None-Renewable source is the most popular than Renewable source.<br>
+             However, most companies uses both renewable and non-renewable source.<br>
+             An increase in renewable usage is expected in the future<br>
+				<br>
+
+
+             </p>
+             </div>
+             <p style="margin-top: 40px"></p>
+             </div>
+        </div>
+
+
+        <footer class="footer">
+            <div class="container-fluid">
+               
+               <!--highchart bar-->
+               
+               
+               
+               
+               
+               
+                <nav class="pull-left">
+                    <ul>
+                        <li>
+                            <a href="#">
+                            
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                               
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                              
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </nav>
+                
+            </div>
+        </footer>
+
+    </div>
+        
+</div>
+    </body>
+        <!--   Core JS Files   -->
+    <script src="assets/js/jquery-1.10.2.js" type="text/javascript"></script>
+	<script src="assets/js/bootstrap.min.js" type="text/javascript"></script>
+
+	<!--  Checkbox, Radio & Switch Plugins -->
+	<script src="assets/js/bootstrap-checkbox-radio-switch.js"></script>
+
+    <!--  Notifications Plugin    -->
+    <script src="assets/js/bootstrap-notify.js"></script>
+<script src="assets/js/light-bootstrap-dashboard.js"></script>
+
+	  	<script src="http://code.highcharts.com/highcharts.js"></script>
+    <script src="http://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/drilldown.js"></script>
+    <script>
+		
+		Highcharts.chart('container', {
+    chart: {
+        type: 'bar'
+    },
+    title: {
+        text: 'State Generation Type'
+    },
+    xAxis: {
+        categories: [
+			{%for x in stlst%}'{{x}}',{%endfor%}]
+    },
+    yAxis: {
+        min: 0,
+        title: {
+            text: 'Total Energy Gneration Million Watts'
+        }
+    },
+    legend: {
+        reversed: true
+    },
+    plotOptions: {
+        series: {
+            stacking: 'normal'
+        }
+    },
+    series: [
+		
+		{%for d in dataset%}
+		{
+        name: '{{d[0]}}',
+		
+        data: [{%for v in d[1]%}
+			{{v}}, 
+			
+			{%endfor%}]
+    },
+		
+	{%endfor%}
+	]
+});
+		</script>
+		
+		<script>
+			// Create the chart
+// Create the chart
+Highcharts.chart('container2', {
+    chart: {
+        type: 'column'
+    },
+    title: {
+        text: 'Primary Fuel Used For Power Generation'
+    },
+    subtitle: {
+        text: ''
+    },
+    xAxis: {
+        type: 'category'
+    },
+    yAxis: {
+        title: {
+            text: 'Total percent'
+        }
+
+    },
+    legend: {
+        enabled: false
+    },
+    plotOptions: {
+        series: {
+            borderWidth: 0,
+            dataLabels: {
+                enabled: true,
+                format: '{point.y:.1f}%'
+            }
+        }
+    },
+
+    tooltip: {
+        headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+        pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}%</b> of total<br/>'
+    },
+
+    series: [{
+        name: 'Brands',
+        colorByPoint: true,
+        data: [
+			
+			{%for fuel in fuelst%}{
+            name: '{{fuel[0]}}',
+            y: {{fuel[1]}},
+            drilldown: '{{fuel[0]}}'
+        }, {%endfor%}
+			  
+			  
+			  
+			  ]
+    }],
+    drilldown: {
+        
+    }
+});
+		</script>
+		
+		<script>
+			Highcharts.chart('container3', {
+    chart: {
+        type: 'column'
+    },
+    title: {
+        text: 'Renewable & Non-Renewable Generation By Company'
+    },
+    xAxis: {
+        categories: [
+			{%for owner in ownerlist%}
+			'{{owner}}',
+		{%endfor%}
+		]
+    },
+    yAxis: {
+        min: 0,
+        title: {
+            text: 'Total Power Generation MW'
+        },
+        stackLabels: {
+            enabled: true,
+            style: {
+                fontWeight: 'bold',
+                color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
+            }
+        }
+    },
+    legend: {
+        align: 'right',
+        x: -30,
+        verticalAlign: 'top',
+        y: 25,
+        floating: true,
+        backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',
+        borderColor: '#CCC',
+        borderWidth: 1,
+        shadow: false
+    },
+    tooltip: {
+        headerFormat: '<b>{point.x}</b><br/>',
+        pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
+    },
+    plotOptions: {
+        column: {
+            stacking: 'normal',
+            dataLabels: {
+                enabled: true,
+                color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
+            }
+        }
+    },
+    series: [{
+        name: 'Renewable',
+        data: [
+			{%for n in renewtally%}
+			{{n}},
+		{%endfor%}]
+    }, {
+        name: 'None-Renewable',
+        data: [
+			{%for n in nontally%}
+			{{n}},
+		{%endfor%}
+		]
+    }]
+});
+			</script>
+			
+			
+			<style>
+  #draggable  { width: 800px; height: 150px; padding: 0.5em;padding-left:200px; };
+				#draggable2  { width: 800px; height: 150px; padding: 0.5em;padding-left:200px; };
+				#draggable3  { width: 800px; height: 150px; padding: 0.5em;padding-left:200px; };
+				
+  </style>
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script>
+  $( function() {
+    $( "#draggable" ).draggable();
+	  $( "#draggable2" ).draggable();$( "#draggable3" ).draggable();$( "#draggable4" ).draggable();
+  } );
+  </script>
+  
+  
+  <script>
+		Highcharts.chart('container4', {
+    chart: {
+        type: 'column'
+    },
+    title: {
+        text: ' Power Generation'
+    },
+    subtitle: {
+        text: 'Source: <a href="http://data.gov.au/dataset/national-power-stations-database">data.gov.au</a>'
+    },
+    xAxis: {
+        type: 'category',
+        labels: {
+            rotation: -45,
+            style: {
+                fontSize: '13px',
+                fontFamily: 'Verdana, sans-serif'
+            }
+        }
+    },
+    yAxis: {
+        min: 0,
+        title: {
+            text: 'Gneration MW'
+        }
+    },
+    legend: {
+        enabled: false
+    },
+    tooltip: {
+        pointFormat: ': <b>{point.y:.1f} MW</b>'
+    },
+    series: [{
+        name: '	',
+        data: [
+           {%for n in state_list%}
+            ['{{n[0]}}', {{n[1]}}],
+			{%endfor%}
+        ],
+        dataLabels: {
+            enabled: true,
+            rotation: -90,
+            color: '#FFFFFF',
+            align: 'right',
+            format: '{point.y:.1f}', // one decimal
+            y: 10, // 10 pixels down from the top
+            style: {
+                fontSize: '13px',
+                fontFamily: 'Verdana, sans-serif'
+            }
+        }
+    }]
+});
+	</script>
+	
+	
+</html>

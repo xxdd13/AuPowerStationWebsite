@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Pivot Table</title>
+        <meta charset="utf-8" />
+	<link rel="icon" type="image/png" href="assets/img/favicon.ico">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+        <!-- external libs from cdnjs -->
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.11/c3.min.css">
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.min.css">
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/4.1.2/papaparse.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.jquery.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.11/c3.min.js"></script>
+
+        <!-- PivotTable.js libs from ../dist -->
+        <link rel="stylesheet" type="text/css" href="/dist/pivot.css">
+        <script type="text/javascript" src="/dist/pivot.js"></script>
+        <script type="text/javascript" src="/dist/d3_renderers.js"></script>
+        <script type="text/javascript" src="/dist/c3_renderers.js"></script>
+        <script type="text/javascript" src="/dist/export_renderers.js"></script>
+        <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
+    <meta name="viewport" content="width=device-width" />
+
+
+    <!-- Bootstrap core CSS     -->
+    <link href="assets/css/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- Animation library for notifications   -->
+    <link href="assets/css/animate.min.css" rel="stylesheet"/>
+
+    <!--  Light Bootstrap Table core CSS    -->
+    <link href="assets/css/light-bootstrap-dashboard.css" rel="stylesheet"/>
+    <!--     Fonts and icons     -->
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href='http://fonts.googleapis.com/css?family=Roboto:400,700,300' rel='stylesheet' type='text/css'>
+    <link href="assets/css/pe-icon-7-stroke.css" rel="stylesheet" />
+      
+      
+
+      
+    </head>
+    <body>
+        <script type="text/javascript">
+    // This example shows how to prepopulate the UI on
+    // load using the "Canadian Parliament 2012" dataset.
+
+    $(function(){
+        $.getJSON("mps2.json", function(mps) {
+            $("#output").pivotUI(mps, {
+                
+                rendererName: "Heatmap",
+                rendererOptions: {
+                    table: {
+                        clickCallback: function(e, value, filters, pivotData){
+                            var names = [];
+                            pivotData.forEachMatchingRecord(filters,
+                                function(record){ names.push(record.Name); });
+                            alert(names.join("\n"));
+                        }
+                    }
+                }
+            });
+        });
+     });
+        </script>
+      
+        <div class="wrapper">
+      <div class="sidebar" data-color="" data-image="assets/img/sidebar-5.jpg">
+
+    	<div class="sidebar-wrapper">
+            <div class="logo">
+                <a href="index.html" class="simple-text">
+                    National Major Power Stations
+                </a>
+            </div>
+
+            <ul class="nav">
+                <li>
+                    <a href="/">
+                        <i class="pe-7s-graph"></i>
+                        <p>Dashboard</p>
+                    </a>
+                </li>
+               
+                <li>
+                    <a href="/poweroutput">
+                        <i class="pe-7s-note2"></i>
+                        <p>Power Output</p>
+                    </a>
+                </li>
+                <li>
+                    <a href="/rawdata">
+                        <i class="pe-7s-note2"></i>
+                        <p>Raw CSV Data</p>
+                    </a>
+                </li>
+                <li>
+                    <a href="/builder">
+                        <i class="pe-7s-note"></i>
+                        <p>Simple Pivot Table</p>
+                    </a>
+                </li>
+                <li class="active">
+                    <a href="/testpivot">
+                        <i class="pe-7s-note2"></i>
+                        <p>Advanced Pivot Table</p>
+                    </a>
+                </li>
+                
+                <li>
+                    <a href="/geo">
+                        <i class="pe-7s-map-marker"></i>
+                        <p>Geo Maps</p>
+                    </a>
+                </li>
+                
+                <li>
+                    <a href="/member">
+                        <i class="pe-7s-users"></i>
+                        <p>Group Members</p>
+                    </a>
+                </li>
+				<li class="active-pro">
+                    <a href="/ob">
+                        <i class="pe-7s-rocket"></i>
+                        <p>Observations</p>
+                    </a>
+                </li>
+            </ul>
+    	</div>
+    </div>
+ <div class="main-panel">
+        <nav class="navbar navbar-default navbar-fixed">
+            <div class="container-fluid">
+              
+            </div>
+        </nav>
+
+
+        <div class="content">
+             <div class="container-fluid">
+             
+             <div id="output" style="margin: 10px;"></div>
+             </div>
+        </div>
+
+
+        <footer class="footer">
+            <div class="container-fluid">
+                <nav class="pull-left">
+                    <ul>
+                        <li>
+                            <a href="#">
+                                
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </nav>
+                
+            </div>
+        </footer>
+
+    </div>
+        
+</div>
+    </body>
+</html>

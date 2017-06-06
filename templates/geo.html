@@ -1,0 +1,381 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<link rel="icon" type="image/png" href="assets/img/favicon.ico">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+	<title>Geo Map</title>
+
+	<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
+    <meta name="viewport" content="width=device-width" />
+
+
+    <!-- Bootstrap core CSS     -->
+    <link href="assets/css/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- Animation library for notifications   -->
+    <link href="assets/css/animate.min.css" rel="stylesheet"/>
+
+    <!--  Light Bootstrap Table core CSS    -->
+    <link href="assets/css/light-bootstrap-dashboard.css" rel="stylesheet"/>
+    <!--     Fonts and icons     -->
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href='http://fonts.googleapis.com/css?family=Roboto:400,700,300' rel='stylesheet' type='text/css'>
+    <link href="assets/css/pe-icon-7-stroke.css" rel="stylesheet" />
+    
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['geochart','corechart', 'scatter']});
+      google.charts.setOnLoadCallback(drawMarkersMap);
+
+      function drawMarkersMap() {
+		if ('{{control_var}}'!='state'){
+		var data = google.visualization.arrayToDataTable([
+			['City',   'Power Stations'],
+			{%for loc in locationlist%}
+				['{{loc[0]}}',{{loc[1]}}],
+			{%endfor%}
+        	]);
+        var options = {region: 'AU',
+					  displayMode: 'markers',
+					   resolution:'provinces',
+					  colorAxis: {colors: ['#FFEADB', '#E8390C']}
+					  };
+		}
+		else{
+			var data = google.visualization.arrayToDataTable([
+			['State',   'Power Stations'],
+			{%for loc in locationlist%}
+				['{{loc[0]}}',{{loc[1]}}],
+			{%endfor%}
+        	]);
+			var options = {region: 'AU',
+						   resolution:'provinces',
+						  colorAxis: {colors: ['#FFEADB', '#E8390C']}
+						  };		
+		};
+        var chart = new google.visualization.GeoChart(document.getElementById('regions_div'));
+
+        chart.draw(data, options);
+      }
+    </script>
+    
+    <script type="text/javascript">
+	  google.charts.load('current', {'packages':['scatter']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart () {
+
+        var data = new google.visualization.DataTable();
+        data.addColumn('number', 'Area');
+        data.addColumn('number', 'Number of Power Stations');
+
+        data.addRows([
+			
+          {%for n in lst%}
+            [{{n[0]}},{{n[1]}}],
+          {%endfor%}
+        ]);
+
+        var options = {
+          width: 800,
+          height: 500,
+          chart: {
+            title: 'Number of Power Station State Area',
+            subtitle: 'based on goverment statistics'
+          },
+          hAxis: {title: 'State Area'},
+          vAxis: {title: 'Number of Power Stations'}
+        };
+
+        var chart = new google.charts.Scatter(document.getElementById('scatterchart_material'));
+
+        chart.draw(data, google.charts.Scatter.convertOptions(options));
+      };
+	</script>
+
+
+    
+</head>
+<body>
+
+<div class="wrapper">
+    <div class="sidebar" data-color="blue" data-image="assets/img/sidebar-5.jpg">
+
+    	<div class="sidebar-wrapper">
+            <div class="logo">
+                <a href="index.html" class="simple-text">
+                    National Major Power Stations
+                </a>
+            </div>
+
+            <ul class="nav">
+                <li>
+                    <a href="/">
+                        <i class="pe-7s-graph"></i>
+                        <p>Dashboard</p>
+                    </a>
+                </li>
+               
+                <li>
+                    <a href="/poweroutput">
+                        <i class="pe-7s-note2"></i>
+                        <p>Power Output</p>
+                    </a>
+                </li>
+                <li>
+                    <a href="/rawdata">
+                        <i class="pe-7s-note2"></i>
+                        <p>Raw CSV Data</p>
+                    </a>
+                </li>
+                <li>
+                    <a href="/builder">
+                        <i class="pe-7s-note"></i>
+                        <p>Simple Pivot Table</p>
+                    </a>
+                </li>
+                <li>
+                    <a href="/testpivot">
+                        <i class="pe-7s-note2"></i>
+                        <p>Advanced Pivot Table</p>
+                    </a>
+                </li>
+                
+                <li class="active">
+                    <a href="/geo">
+                        <i class="pe-7s-map-marker"></i>
+                        <p>Geo Maps</p>
+                    </a>
+                </li>
+                
+                <li>
+                    <a href="/member">
+                        <i class="pe-7s-users"></i>
+                        <p>Group Members</p>
+                    </a>
+                </li>
+				<li class="active-pro">
+                    <a href="/ob">
+                        <i class="pe-7s-rocket"></i>
+                        <p>Observations</p>
+                    </a>
+                </li>
+            </ul>
+    	</div>
+    </div>
+
+    <div class="main-panel">
+        <nav class="navbar navbar-default navbar-fixed">
+            <div class="container-fluid">
+               
+           
+                
+            </div>
+        </nav>
+
+        <div class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    
+
+
+                    <div class="col-md-12">
+                        <div class="card card-plain">
+                            <div class="header">
+                                <h4 class="title">Location Data</h4>
+                                
+                                <div>
+                                	<form action = "/geo" method="GET">
+                                		<select name="viewmode" onchange="this.form.submit()">
+                                			<option value="disabled">Choose View Method</option>
+                                			<option value="regions">View By Australia</option>
+                                			<option value="state">View By State</option>
+                                		</select>
+                                		
+                                		
+                                	</form>
+                                	
+                                <div>
+                                <p class="category">
+                                <h5><span>{{num_station}} Power Stations With Location Data</span>
+                                </p>
+                                <p class="category">
+                                <h5><span>Location with most Power Stations : &nbsp;&nbsp; 
+                                			<b>{{locationtable[0][0]}}</b> 
+                                			&nbsp;with <b>{{locationtable[0][1]}}</b> Power Stations.</span>
+                                </p>
+
+                            </div>
+                            <div class="content table-responsive table-full-width">
+                              
+								<div id="regions_div" style="width: 900px; height: 500px;"></div>
+                                <table class="table table-hover table-striped">
+                                    <thead>
+                                        
+                                        <th>Location</th>
+                                        <th>Number of Power Stations</th>
+                                         	
+                                    </thead>
+                                    <tbody>
+                                       {%for loc in locationtable%}
+                                        <tr>
+                                                <td>{{loc[0]}}</td>
+                                                <td>{{loc[1]}}</td>
+                                        </tr>
+                                       {%endfor%}
+                                    </tbody>
+                                    
+                                </table>
+                                {% if state_img==1%}
+                                <!--
+                                <div id="scatterchart_material" style="width: 900px; height: 500px;"></div>
+                                -->
+                                
+                                
+                                <div id="container" style="min-width: 800px; height: 400px; max-width: 900px; margin: 0 auto">
+                                	
+                                	
+                                </div>
+                                <p style="margin-top: 20px;">A more accurate representation would be between amount of power generated versus state population. <br>However, the relationship of the above graph appears to be linear for the most part except for a few points of dicontinuity. <br>This agrees with intuition as the bigger the state, the more power stations are required to cater to its power needs</p>
+                                {%endif%}
+                                
+
+                            </div>
+                            
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <div class="container-fluid">
+                <nav class="pull-left">
+                    <ul>
+                        <li>
+                            <a href="#">
+                                
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </nav>
+                
+            </div>
+        </footer>
+
+
+    </div>
+</div>
+</div>
+</div>
+
+</body>
+
+    <!--   Core JS Files   -->
+    <script src="assets/js/jquery-1.10.2.js" type="text/javascript"></script>
+	<script src="assets/js/bootstrap.min.js" type="text/javascript"></script>
+
+	<!--  Checkbox, Radio & Switch Plugins -->
+	<script src="assets/js/bootstrap-checkbox-radio-switch.js"></script>
+
+    <!--  Notifications Plugin    -->
+    <script src="assets/js/bootstrap-notify.js"></script>
+<script src="assets/js/light-bootstrap-dashboard.js"></script>
+
+	  	<script src="http://code.highcharts.com/highcharts.js"></script>
+    <script src="http://code.highcharts.com/modules/exporting.js"></script>
+<script>
+   Highcharts.chart('container', {
+    chart: {
+        type: 'scatter',
+        zoomType: 'xy'
+    },
+    title: {
+        text: 'Number of Power Stations Versus State Area'
+    },
+    subtitle: {
+        text: 'Source: Austrlian Goverment'
+    },
+    xAxis: {
+        title: {
+            enabled: true,
+            text: 'State Land Area (m^2)'
+        },
+        startOnTick: true,
+        endOnTick: true,
+        showLastLabel: true
+    },
+    yAxis: {
+        title: {
+            text: 'Number Of Power Stations'
+        }
+    },
+    legend: {
+        layout: 'vertical',
+        align: 'left',
+        verticalAlign: 'top',
+        x: 50,
+        y: 30,
+        floating: true,
+        backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF',
+        borderWidth: 1
+    },
+    plotOptions: {
+        scatter: {
+            marker: {
+                radius: 5,
+                states: {
+                    hover: {
+                        enabled: true,
+                        lineColor: 'rgb(100,100,100)'
+                    }
+                }
+            },
+            states: {
+                hover: {
+                    marker: {
+                        enabled: false
+                    }
+                }
+            },
+            tooltip: {
+                headerFormat: '<b>{series.name}</b><br>',
+                pointFormat: '{point.x} m^2, {point.y} stations'
+            }
+        }
+    },
+    series: [
+		{%for n in lst%}
+		{
+		
+        name: '{{n[2]}}',
+        color: 'rgba(223, 83, 83, .5)',
+        data: [[{{n[0]}}, {{n[1]}}]]
+
+    	},
+		{%endfor%}
+			
+		]
+});
+
+
+
+</script>
+
+
+</html>
